@@ -1,0 +1,104 @@
+#include<iostream>
+#include<fstream>
+#include<cstring>
+#include<cstdlib>
+#include<sstream>
+#include<vector>
+
+using namespace std;
+
+struct Alumno{
+    string nombre, apellidos;
+    float nota;
+};
+
+bool procesarArgumentos(int argc, char* argv[], string &lista){
+    bool ok=false;
+        if(argc==3){
+            lista=argv[2];
+            ok=true;
+        }
+return ok;
+}
+
+bool procesarNotas(string lista,vector<Alumno> &alumnos){
+    ifstream fich;
+    bool ok;
+    char cad[5];
+    string aux;
+    string linea;
+    string basura;
+
+    fich.open(lista);
+        if(!fich.is_open()){
+            cout<<"no c abre el fichero"<<endl;
+            return ok=false;
+        }
+        ok=true;
+        while(getline(fich,linea)){
+            Alumno nuevo;
+            stringstream ss(linea);
+            getline(ss, nuevo.apellidos, ',');
+            ss.get();
+            getline(ss, nuevo.nombre, ' ');
+            getline(ss,basura, ' ');
+            while(getline(ss, aux,' ')){
+                strcpy(cad, aux.c_str());
+                for(int i=0;i<5;i++){
+                    if(cad[i]==','){
+                        cad[i]='.';
+                    }
+                }
+                aux=cad;
+                nuevo.nota=stof(aux);
+            }
+            alumnos.push_back(nuevo);
+        }
+return ok;
+}
+
+void imprimirAlumnos(vector<Alumno> alumnos){
+    int aprobados=0, suspendidos=0, hacenMedia=0, totales=0;
+    float suma=0,media, pap,psus, pmed;
+for(Alumno a:alumnos){
+    cout<<a.nombre<<' '<<a.apellidos<<": "<<a.nota<<endl;
+    totales++;
+    suspendidos++;
+    suma=suma+a.nota;
+    if(a.nota>=3.5){
+        hacenMedia++;
+        if(a.nota>=5){
+            aprobados++;
+            suspendidos--;
+        }
+    }
+}
+media=suma/totales;
+pap=((float)aprobados/totales)*100.0;
+psus=((float)suspendidos/totales)*100.0;
+pmed=((float)hacenMedia/totales)*100.0;
+cout<<"En total se han presentado: "<<totales<< " alumnos a la convocatoria de los que hay: "<<aprobados<<" aprobados, "<<suspendidos<<" suspendidos y en total "<<hacenMedia<<" a los que se le hace media con las prácticas(+3.5)"<<endl;
+cout<<"La nota media del examen es: "<< media<< endl;
+cout<< "Han aprobado el "<<pap<<" %"<<endl;
+cout<< "Han suspendido el "<<psus<<" %"<<endl;
+cout<< "Hacen media el "<<pmed<<" %"<<endl;
+}
+
+int main(int argc, char* argv[]){
+string lista;
+bool ok;
+vector<Alumno> alumnos;
+
+ok=procesarArgumentos(argc,argv,lista);
+    if(!ok){
+        cout<<"Argumentos Incorrectos."<<endl;
+        return 0;
+    }
+    ok=procesarNotas(lista, alumnos);
+    if(!ok){
+        cout<<"No se ha podido abrir el fichero"<<endl;
+        return 0;
+    }
+    imprimirAlumnos(alumnos);
+return 0;
+}
