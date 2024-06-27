@@ -1,1 +1,6 @@
-A
+-  analisisNotas:
+Lee de un fichero de texto una lsita de alumnos y sus notas, se queda con la ultima nota y
+lo pasa a notación americana para poder ordenar a los alumnos por su nota, calcular la media, y el porcentaje
+de aprobados, suspensos y personas a las que se le hace media.
+compilación: g++ resultados.cc -o res
+./res -i notas.txt
