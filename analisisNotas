@@ -57,31 +57,46 @@ bool procesarNotas(string lista,vector<Alumno> &alumnos){
 return ok;
 }
 
-void imprimirAlumnos(vector<Alumno> alumnos){
-    int aprobados=0, suspendidos=0, hacenMedia=0, totales=0;
+void imprimirAlumnos(vector<Alumno> &alumnos){
+    vector<Alumno> ordenados;
+    int aprobados=0, suspendidos=0, hacenMedia=0, totales=0,num=1;
     float suma=0,media, pap,psus, pmed;
-for(Alumno a:alumnos){
-    cout<<a.nombre<<' '<<a.apellidos<<": "<<a.nota<<endl;
-    totales++;
-    suspendidos++;
-    suma=suma+a.nota;
-    if(a.nota>=3.5){
-        hacenMedia++;
-        if(a.nota>=5){
-            aprobados++;
-            suspendidos--;
+    unsigned int tam=alumnos.size();
+    for(unsigned int j=0;j<tam;j++){
+        int pos=-1;
+        float mayor=0;
+        for(unsigned int i=0;i<alumnos.size();i++){
+            if(alumnos[i].nota>mayor){
+                mayor=alumnos[i].nota;
+                pos=i;
+            }
+        }
+        ordenados.push_back(alumnos[pos]);
+        alumnos.erase(alumnos.begin()+pos);
+    }
+    for(Alumno a:ordenados){
+        cout<<num<<"- "<<a.nombre<<' '<<a.apellidos<<": "<<a.nota<<endl;
+        num++;
+        totales++;
+        suspendidos++;
+        suma=suma+a.nota;
+        if(a.nota>=3.5){
+            hacenMedia++;
+            if(a.nota>=5){
+                aprobados++;
+                suspendidos--;
+            }
         }
     }
-}
-media=suma/totales;
-pap=((float)aprobados/totales)*100.0;
-psus=((float)suspendidos/totales)*100.0;
-pmed=((float)hacenMedia/totales)*100.0;
-cout<<"En total se han presentado: "<<totales<< " alumnos a la convocatoria de los que hay: "<<aprobados<<" aprobados, "<<suspendidos<<" suspendidos y en total "<<hacenMedia<<" a los que se le hace media con las prácticas(+3.5)"<<endl;
-cout<<"La nota media del examen es: "<< media<< endl;
-cout<< "Han aprobado el "<<pap<<" %"<<endl;
-cout<< "Han suspendido el "<<psus<<" %"<<endl;
-cout<< "Hacen media el "<<pmed<<" %"<<endl;
+    media=suma/totales;
+    pap=((float)aprobados/totales)*100.0;
+    psus=((float)suspendidos/totales)*100.0;
+    pmed=((float)hacenMedia/totales)*100.0;
+    cout<<"En total se han presentado: "<<totales<< " alumnos a la convocatoria de los que hay: "<<aprobados<<" aprobados, "<<suspendidos<<" suspendidos y en total "<<hacenMedia<<" a los que se le hace media con las prácticas(+3.5)"<<endl;
+    cout<<"La nota media del examen es: "<< media<< endl;
+    cout<< "Han aprobado el "<<pap<<" %"<<endl;
+    cout<< "Han suspendido el "<<psus<<" %"<<endl;
+    cout<< "Hacen media el "<<pmed<<" %"<<endl;
 }
 
 int main(int argc, char* argv[]){
