@@ -44,7 +44,7 @@ bool procesarNotas(string lista,vector<Alumno> &alumnos){
             getline(ss,basura, ' ');
             while(getline(ss, aux,' ')){
                 strcpy(cad, aux.c_str());
-                for(int i=0;i<5;i++){
+                for(int i=0;i<7;i++){
                     if(cad[i]==','){
                         cad[i]='.';
                     }
@@ -52,7 +52,10 @@ bool procesarNotas(string lista,vector<Alumno> &alumnos){
                 aux=cad;
                 nuevo.nota=stof(aux);
             }
+            //comentar el "if" si se quieren tener en cuenta a los no presentados
+            if(nuevo.nota>0){
             alumnos.push_back(nuevo);
+            }
         }
 return ok;
 }
@@ -64,7 +67,7 @@ void imprimirAlumnos(vector<Alumno> &alumnos){
     unsigned int tam=alumnos.size();
     for(unsigned int j=0;j<tam;j++){
         int pos=-1;
-        float mayor=0;
+        float mayor=-1;
         for(unsigned int i=0;i<alumnos.size();i++){
             if(alumnos[i].nota>mayor){
                 mayor=alumnos[i].nota;
